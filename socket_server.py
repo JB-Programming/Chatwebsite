@@ -34,8 +34,7 @@ def handle_client(conn, address):
             msg = conn.recv(msg_length).decode(FORMAT)
             print(f"[{address}] {msg}")
             update_others(msg,msg_length, conn)
-            #conn.send("Message recived!".encode(FORMAT))
-            if msg == DISCONNECT_KEYWORD:
+            if DISCONNECT_KEYWORD in msg:
                 connected = False
                 print(f"[{address}] User disconnected!")
                 conn.send(str(DISCONNECT_MESSAGE_LENGTH).encode(FORMAT))

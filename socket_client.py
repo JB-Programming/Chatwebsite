@@ -1,6 +1,6 @@
 import socket
 import threading
-import time
+from datetime import datetime
 
 
 HEADER = 64
@@ -18,24 +18,22 @@ class USER:
     user_name =""
 
 def send(msg):
-    message_sending = (USER.user_name + msg).encode(FORMAT)
+    message_sending = (datetime.now().strftime('[%d/%m/%Y %H:%M:%S]') + USER.user_name + msg).encode(FORMAT)
     msg_length = len(message_sending)
     send_length = str(msg_length).encode(FORMAT)
     send_length += b' ' * (HEADER - len(send_length))
     client.send(send_length)
     client.send(message_sending)
-    #print(client.recv(2048).decode(FORMAT))
-    #print(client.recv(2048).decode(FORMAT))
 
 def listen_to_socket():
-    while USER.message != DISCONNECT_KEYWORD:
+    while DISCONNECT_KEYWORD in USER.message:
         thread = threading.Thread(target=user_input)
         thread.start()
         incoming_message_length = int(client.recv(HEADER).decode(FORMAT))
         print(client.recv(incoming_message_length).decode(FORMAT))
 
 def user_input():
-    while USER.message != DISCONNECT_KEYWORD:
+    while DISCONNECT_KEYWORD in USER.message:
         USER.message = input()
         send(USER.message)
 
