@@ -7,7 +7,7 @@ HEADER = 64
 PORT = 5050
 FORMAT = 'utf-8'
 DISCONNECT_KEYWORD = "!DISCONNECT"
-SERVER = "172.16.11.79"
+SERVER = "192.168.168.108"
 ADDRESS = (SERVER, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,14 +26,14 @@ def send(msg):
     client.send(message_sending)
 
 def listen_to_socket():
-    while DISCONNECT_KEYWORD in USER.message:
+    while DISCONNECT_KEYWORD not in USER.message:
         thread = threading.Thread(target=user_input)
         thread.start()
         incoming_message_length = int(client.recv(HEADER).decode(FORMAT))
         print(client.recv(incoming_message_length).decode(FORMAT))
 
 def user_input():
-    while DISCONNECT_KEYWORD in USER.message:
+    while DISCONNECT_KEYWORD not in USER.message:
         USER.message = input()
         send(USER.message)
 
