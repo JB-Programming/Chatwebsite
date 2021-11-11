@@ -1,10 +1,11 @@
 import socket
 import threading
+from requests import get
 
 
 HEADER = 64
 PORT = 5050
-SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = "0.0.0.0"#socket.gethostbyname(socket.gethostname())
 ADDRESS = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_KEYWORD = "!DISCONNECT"
@@ -14,6 +15,7 @@ DISCONNECT_MESSAGE_LENGTH = 17
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDRESS)
 connected_users = []
+ip = get('https://api.ipify.org').content.decode('utf8')
 
 
 def update_others(outgoing_message, message_length, sender):
@@ -54,5 +56,6 @@ def start():
         print(f"[ACTIV CONNECTIONS] {threading.activeCount() - 1}")
 
 print("[STARTING] server is starting...")
+print('My public IP address is: {}'.format(ip))
 start()
 
